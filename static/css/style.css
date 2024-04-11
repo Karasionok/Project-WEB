@@ -1,0 +1,21 @@
+.main{
+        width: 100%;
+        height: 100%;
+        color: #000022;
+        }
+.big{
+        display: inline-block;
+        width: 70%;
+        height: 100%;
+        background-color: #003eff;
+        }
+.smalls {
+        display: inline-block;
+        width: 29%;
+        height: 100%;
+        }
+.small{
+        border-bottom: 3px solid white;
+        height: 49.7%;
+        background-color: red;
+    }
