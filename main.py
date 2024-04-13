@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 
 from Forms.tracks_py import AddForm
 from data import db_session
@@ -62,10 +62,13 @@ def reqister():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     form = AddForm()
-    print(1)
-    if form.validate_on_submit():
+    if request.method == 'GET':
+        return render_template('add.html', title='Добавить трек', form=form)
+    elif request.method == 'POST':
+        f = request.files['file']
+        with open(AddForm.name if AddForm.name.endswith(".mp3") else AddForm.name + ".mp3", 'w') as file:
+            file.write(f.read())
         return redirect('/index')
-    return render_template('add.html', title='Добавить трек', form=form)
 
 
 if __name__ == '__main__':
