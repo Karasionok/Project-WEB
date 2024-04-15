@@ -35,7 +35,12 @@
         </div>
 
     </div>
-    <div id="footer"></div>
+    <div id="footer">
+        {{ track_name }}
+        <audio controls>
+            <source src="{{ url_for('static', filename=track_path) }}">
+        </audio>
+    </div>
 </div>
 </body>
 </html>

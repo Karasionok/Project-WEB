@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Добавить трек</h1>
-    <form action="" method="post">
+    <form action="" method="post"  enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <p>
             {{ form.name.label }}<br>
@@ -40,14 +40,15 @@
                 </div>
             {% endfor %}
         </p>
-        <div>
-        <form class="login_form" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="photo">Добавить картинку</label>
-                <input type="file" class="form-control-file" id="photo" name="file">
-            </div>
-        </form>
-        </div>
+        <p>
+            {{ form.track.label }}<br>
+            {{ form.track(class="form-control", type="file") }}<br>
+            {% for error in form.track.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
         <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         <div>{{ message }}</div>
     </form>

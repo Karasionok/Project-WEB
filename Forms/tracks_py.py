@@ -8,5 +8,5 @@ class AddForm(FlaskForm):
     album = StringField('Альбом', validators=[DataRequired()])
     singer = StringField('Исполнитель', validators=[DataRequired()])
     duration = StringField('Длительность', validators=[DataRequired()])
-    file = FileField('Файл', validators=[DataRequired()])
+    track = FileField('Файл', validators=[DataRequired()])
     submit = SubmitField('Добавить')
