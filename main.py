@@ -70,46 +70,67 @@ def add():
         return render_template('add.html', title='Добавить трек', form=form)
     elif request.method == 'POST':
         f = form.track.data
-        with (open(f'static/tracks/{form.name.data if form.name.data.endswith(".mp3") else form.name.data + ".mp3"}', 'wb')
+        with (open(f'static/tracks/{form.name.data if form.name.data.endswith(".mp3") else form.name.data + ".mp3"}',
+                   'wb')
               as file):
             file.write(f.read())
         db_sess = db_session.create_session()
-        # condition_s = db_sess.query(Singer).filter(Singer.name == form.singer.data).first()
-        # if condition_s:
-        #     condition_a = db_sess.query(Album).filter(
-        #         Album.name == form.album.data and Album.singer_id == condition_s.id).first()
-        #     if condition_a:
-        #         condition_t = db_sess.query(Track).filter(
-        #             Track.name == form.name.data and Track.album_id == condition_a.id).first()
-        #         if condition_t:
-        #             return render_template('add.html', title='Добавление трека',
-        #                                    form=form,
-        #                                    message="Такой трек уже есть")
-        # if db_sess.query(Track).filter(Track.name == form.name.data).first():
-        #     return render_template('add.html', title='Добавление трека',
-        #                            form=form,
-        #                            message="Такой трек уже есть")
-        singer = Singer(
-            name=form.singer.data
-        )
-        album = Album(
-            album_name=form.album.data,
-            singer_id=singer.id
-        )
-        db_sess.add(album)
-        db_sess.commit()
+        condition_s = db_sess.query(Singer).filter(Singer.name == form.singer.data).first()
+        if condition_s:
+            condition_a = db_sess.query(Album).filter(
+                Album.album_name == form.album.data and Album.singer_id == condition_s.id).first()
+            if condition_a:
+                condition_t = db_sess.query(Track).filter(
+                    Track.name == form.name.data and Track.album_id == condition_a.id).first()
+                if condition_t:
+                    # TODO: validate
+                    return render_template('add.html', title='Добавление трека',
+                                           form=form,
+                                           message="Такой трек уже есть")
+
+            else:
+                album = Album(
+                    album_name=form.album.data,
+                    singer_id=condition_s.id
+                )
+                db_sess.add(album)
+                db_sess.commit()
+                condition_a = db_sess.query(Album).filter(
+                    Album.album_name == form.album.data and Album.singer_id == condition_s.id).first()
+                track = Track(
+                    name=form.name.data,
+                    album_id=condition_a.id,
+                    duration=form.duration.data,
+                    path=f'tracks/{form.name.data}.mp3',
+                    singer_id=condition_s.id
+                )
+                db_sess.add(track)
+                db_sess.commit()
+        else:
+            singer = Singer(
+                name=form.singer.data
+            )
+            db_sess.add(singer)
+            db_sess.commit()
+            condition_s = db_sess.query(Singer).filter(Singer.name == form.singer.data).first()
+            album = Album(
+                album_name=form.album.data,
+                singer_id=condition_s.id
+            )
+            db_sess.add(album)
+            db_sess.commit()
+            condition_a = db_sess.query(Album).filter(
+                Album.album_name == form.album.data and Album.singer_id == condition_s.id).first()
         track = Track(
             name=form.name.data,
-            album_id=album.id,
+            album_id=condition_a.id,
             duration=form.duration.data,
             path=f'tracks/{form.name.data}.mp3',
-            singer_id=singer.id
+            singer_id=condition_s.id
         )
-
-        db_sess.add(singer)
-        db_sess.add(album)
         db_sess.add(track)
         db_sess.commit()
+
         return redirect('/index')
 
 
