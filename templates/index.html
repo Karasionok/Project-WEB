@@ -6,6 +6,7 @@
         <div id="content" class="big">
             <table class="table table-dark table-borderless">
                 <tr>
+                    <td> </td>
                     <td>Название</td>
                     <td>Исполнитель</td>
                     <td>Альбом</td>
@@ -13,11 +14,14 @@
                 </tr>
                 {% for track in tracks %}
                 <tr>
-                    <td>{{track["name"]}}</td>
-                    <td>{{track["singer"]}}</td>
-                    <td>{{track["album"]}}</td>
-                    <td>{{track["duration"]}}</td>
+                        <td><a class="btn button32" href="/index/{{ track['id'] }}"><img src="{{ url_for('static', filename='images/Play.png') }}"></a></td>
+                        <td>{{ track["name"] }}</td>
+                        <td>{{ track["singer"] }}</td>
+                        <td>{{ track["album"] }}</td>
+                        <td>{{ track["duration"] }}</td>
+                    </a>
                 </tr>
+
                 {% endfor %}
             </table>
         </div>

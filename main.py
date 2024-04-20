@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, session
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from Forms.tracks_py import AddForm
 from data import db_session
@@ -25,10 +25,12 @@ def index():
         for i in singer:
             album = db_sess.query(Album).filter(Album.singer_id == i.id).first()
             track = db_sess.query(Track).filter(Track.album_id == album.id).first()
-            dict = {'name': track.name,
+            dict = {'id': track.id,
+                    'name': track.name,
                     'singer': i.name,
                     'album': album.album_name,
-                    'duration': track.duration}
+                    'duration': track.duration,
+                    'path': track.path}
             track_list.append(dict)
     else:
         track_list = []
@@ -38,6 +40,18 @@ def index():
             pass
     track_name = 'In Bloom'
     track_path = 'tracks/In Bloom.mp3'
+
+    return render_template('index.html', tracks=track_list,
+                           track_name=track_name, track_path=track_path)
+
+
+@app.route('/index/<int:number>')
+def player(number):
+    track_list = session.get('track_list')
+    for i in track_list:
+        if i['id'] == number:
+            track_name = i['name']
+            track_path = i['path']
     return render_template('index.html', tracks=track_list,
                            track_name=track_name, track_path=track_path)
 
@@ -50,6 +64,20 @@ def login():
         user = db_sess.query(User).filter(User.name == form.name.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
+            track_list = []
+            db_sess = db_session.create_session()
+            singer = db_sess.query(Singer).all()
+            for i in singer:
+                album = db_sess.query(Album).filter(Album.singer_id == i.id).first()
+                track = db_sess.query(Track).filter(Track.album_id == album.id).first()
+                dict = {'id': track.id,
+                        'name': track.name,
+                        'singer': i.name,
+                        'album': album.album_name,
+                        'duration': track.duration,
+                        'path': track.path}
+                track_list.append(dict)
+            session['track_list'] = track_list
             return redirect("/")
         return render_template('login.html',
                                message="Неправильный логин или пароль",

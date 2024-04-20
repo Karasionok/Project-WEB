@@ -19,3 +19,23 @@
         height: 49.7%;
         background-color: red;
     }
+
+a.button32 {
+  display: inline-block;
+  font-size: 180%;
+  width: 1.7em;
+  height: 1.7em;
+  line-height: 1.7em; /* смещение по вертикали */
+  vertical-align: middle;
+  text-align: center;
+  letter-spacing: -.2em; /* сдвиг треугольника вправо */
+  text-decoration: none;
+  text-shadow: 0 -1px 1px rgba(0,0,0,.6), 0 1px 1px rgba(255,255,255,.4);
+  color: #999;
+  border-radius: 100%;
+  background: #ddd;
+  box-shadow:
+   inset 0 1px 1px rgba(255,255,255,.5),
+   inset 0 -1px 1px rgba(0,0,0,.5),
+   0 1px 3px rgba(0,0,0,.5);
+}
