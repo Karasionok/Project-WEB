@@ -2,7 +2,7 @@
 {% block content %}
 <div id="container">
     <div class="wrapper">
-        <div class="smalls sidebar"> sidebar</div>
+        <div class="smalls sidebar"> <a class="btn btn-primary button32" href="/add"> Добавить трек </a></div>
         <div id="content" class="big">
             <table class="table table-dark table-borderless">
                 <tr>
@@ -28,10 +28,10 @@
 
     </div>
     <div id="footer">
-        {{ track_name }}
-        <audio controls>
+        <div class="track_name">{{ track_name }}</div>
+        <div class="track_name"><audio controls>
             <source src="{{ url_for('static', filename=track_path) }}">
-        </audio>
+        </audio></div>
     </div>
 </div>
 {% endblock %}
