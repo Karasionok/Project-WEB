@@ -54,9 +54,13 @@ def index():
                     'duration': track.duration,
                     'path': track.path}
             track_list.append(dict)
-    track_name = track_list[0]['name']
-    track_path = track_list[0]['path']
-    session['track_list'] = track_list
+    if len(track_list) != 0:
+        track_name = track_list[0]['name']
+        track_path = track_list[0]['path']
+    else:
+        track_name = 'Выберите трек'
+        track_path = 'static/tracks/In Bloom'
+        session['track_list'] = track_list
     return render_template('index.html', tracks=track_list,
                            track_name=track_name, track_path=track_path)
 
